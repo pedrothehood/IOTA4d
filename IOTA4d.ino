@@ -4,12 +4,12 @@
 #include <ArduinoJson.h>
 #include <RD03D.h>
 #include <websiteRadar.h>
+#include <ArduinoOTA.h>
 #include "buzzerTask.h"      // Lokale Header-Datei laden
 #include "serverInit.h"      // Lokale Header-Datei laden
 #include "sensorDataToWs.h"  // Lokale Header-Datei laden
 #include "serverInit.h"      // Lokale Header-Datei laden
 #include "wifiInit.h"        // Lokale Header-Datei laden
-
 
 const char *ssid = "TP-Link_2.4GHz_0494CA";
 const char *password = "pedrothehood007";
@@ -40,8 +40,12 @@ void setup() {
   // static TargetData*  ptrTarget ; //= radar.getTarget();    // get pointer to first target ( SINGLE DETECTION )
   // static bool detected = false;
   //sensorDataToWs(ws,radar,personDetected,targetDistance,isMoving);
+  // Hostname im Netzwerk festlegen (so erscheint das Board in VS Code)
+  ArduinoOTA.setHostname("esp32s3-iota4d");
+  ArduinoOTA.begin();
 }
 void loop() {
-
+ // WICHTIG: Prüft kontinuierlich auf eingehende Updates
+  ArduinoOTA.handle(); 
 sensorDataToWs(ws,radar, personDetected, targetDistance,isMoving);
 }
